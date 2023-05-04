@@ -1,14 +1,21 @@
 import React from 'react';
+import css from './Contacts.module.css';
 
 function ContactList({ contacts, onDeleteContact }) {
   return (
     <ul>
       {contacts.map(({ id, name, number }) => (
-        <li key={id}>
+        <li className={css.list} key={id}>
           <p>
             {name}: {number}
           </p>
-          <button onClick={() => onDeleteContact(id)}>Delete</button>
+          <button
+            type="button"
+            className={css.button}
+            onClick={() => onDeleteContact(id)}
+          >
+            Delete
+          </button>
         </li>
       ))}
     </ul>

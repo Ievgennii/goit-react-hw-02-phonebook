@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import Notiflix from 'notiflix';
+import shortid from 'shortid';
 import ContactList from './ContactList';
 import ContactForm from './ContactForm';
-import shortid from 'shortid';
+import css from './Contacts.module.css';
 import Filter from './Filter';
 
 class App extends Component {
@@ -14,7 +15,6 @@ class App extends Component {
       { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
     ],
     filter: '',
-    
   };
 
   deleteContact = contactId => {
@@ -24,16 +24,15 @@ class App extends Component {
   };
 
   addContact = (name, number) => {
-
-    const hasName = this.state.contacts.some(obj => obj.name.toLowerCase() === name.toLowerCase());
-    console.log(hasName)
+    const hasName = this.state.contacts.some(
+      obj => obj.name.toLowerCase() === name.toLowerCase()
+    );
+    console.log(hasName);
     console.log(name, number);
 
     if (hasName) {
-      Notiflix.Notify.info(
-        `${name} is alredy in contacts`
-      );
-      return
+      Notiflix.Notify.info(`${name} is alredy in contacts`);
+      return;
     } else {
       const contact = {
         id: shortid.generate(),
@@ -44,36 +43,38 @@ class App extends Component {
         contacts: [contact, ...contacts],
       }));
     }
-
-    
   };
 
   changeFilter = e => {
-    this.setState({filter: e.currentTarget.value})
-  }
+    this.setState({ filter: e.currentTarget.value });
+  };
 
-  getVisibleContacts = ()=> {
-    const {filter, contacts} = this.state
-    const normalizedFilter = filter.toLowerCase()
+  getVisibleContacts = () => {
+    const { filter, contacts } = this.state;
+    const normalizedFilter = filter.toLowerCase();
 
-    return contacts.filter(contact => contact.name.toLowerCase().includes(normalizedFilter))
-
-  }
+    return contacts.filter(contact =>
+      contact.name.toLowerCase().includes(normalizedFilter)
+    );
+  };
 
   render() {
-    const {  filter } = this.state;
-    
-    const visibleContacts = this.getVisibleContacts()
+    const { filter } = this.state;
+
+    const visibleContacts = this.getVisibleContacts();
 
     return (
-      <div className="App">
+      <div className={css.section}>
         <h1>Phonebook</h1>
-        
+
         <ContactForm onSubmit={this.addContact} />
-        <h2>Contacts</h2>
-        <Filter value={filter} onChange={this.changeFilter}/>
-        
-        <ContactList contacts={visibleContacts} onDeleteContact={this.deleteContact} />
+        <h1>Contacts</h1>
+        <Filter value={filter} onChange={this.changeFilter} />
+
+        <ContactList
+          contacts={visibleContacts}
+          onDeleteContact={this.deleteContact}
+        />
       </div>
     );
   }
