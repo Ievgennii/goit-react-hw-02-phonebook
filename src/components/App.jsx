@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Notiflix from 'notiflix';
 import ContactList from './ContactList';
 import ContactForm from './ContactForm';
 import shortid from 'shortid';
@@ -23,16 +24,28 @@ class App extends Component {
   };
 
   addContact = (name, number) => {
+
+    const hasName = this.state.contacts.some(obj => obj.name.toLowerCase() === name.toLowerCase());
+    console.log(hasName)
     console.log(name, number);
 
-    const contact = {
-      id: shortid.generate(),
-      name,
-      number,
-    };
-    this.setState(({ contacts }) => ({
-      contacts: [contact, ...contacts],
-    }));
+    if (hasName) {
+      Notiflix.Notify.info(
+        `${name} is alredy in contacts`
+      );
+      return
+    } else {
+      const contact = {
+        id: shortid.generate(),
+        name,
+        number,
+      };
+      this.setState(({ contacts }) => ({
+        contacts: [contact, ...contacts],
+      }));
+    }
+
+    
   };
 
   changeFilter = e => {
